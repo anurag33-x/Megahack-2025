@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact - The Delicious Hub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col">
+
+    <!-- Navbar -->
+    <nav class="bg-purple-100 shadow-md p-4 flex justify-between items-center">
+        <h1 class="text-2xl font-bold text-purple-700">The Delicious Hub</h1>
+
+        <!-- Mobile Menu Button -->
+        <button id="menu-btn" class="md:hidden text-purple-700 text-3xl focus:outline-none">☰</button>
+
+        <!-- Menu Items -->
+        <ul id="menu" class="hidden md:flex space-x-6 absolute md:relative top-16 left-0 w-full md:w-auto bg-purple-100 md:bg-transparent md:flex-row flex-col md:top-0 p-4 md:p-0 shadow-md md:shadow-none">
+            <li><a href="homepage.html" class="block text-gray-700 hover:text-purple-600 p-2">Home</a></li>
+            <li><a href="menu.html" class="block text-gray-700 hover:text-purple-600 p-2">Menu</a></li>
+            <li><a href="cart.html" class="block text-gray-700 hover:text-purple-600 p-2">Cart</a></li>
+            <li><a href="orders.html" class="block text-gray-700 hover:text-purple-600 p-2">Orders</a></li>
+            <li><a href="contact.html" class="block text-purple-600 font-bold p-2">Contact</a></li>
+        </ul>
+
+        <a href="profile.html" class="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 hidden md:block">Profile</a>
+    </nav>
+
+    <!-- Main Content -->
+    <section class="flex-grow max-w-5xl mx-auto py-12 px-6">
+        <h2 class="text-3xl font-bold text-purple-700 text-center">📞 Contact Us</h2>
+
+        <!-- Contact Cards (Increased Size) -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-8">
+
+            <!-- Canteen Manager -->
+            <div class="bg-purple-100 p-8 rounded-lg shadow-md h-64 flex flex-col justify-center">
+                <h3 class="text-2xl font-bold text-purple-700">👨‍💼 Canteen Manager</h3>
+                <p class="text-lg text-gray-700 mt-2">📧 Email: <a href="mailto:canteen@college.com" class="text-purple-600">canteen@college.com</a></p>
+                <p class="text-lg text-gray-700">📞 Phone: +91 98765 43210</p>
+            </div>
+
+            <!-- Lost & Found -->
+            <div class="bg-purple-100 p-8 rounded-lg shadow-md h-64 flex flex-col justify-center">
+                <h3 class="text-2xl font-bold text-purple-700">🔍 Lost & Found</h3>
+                <form>
+                    <input type="text" placeholder="Describe the item..." class="w-full mt-3 p-3 border rounded-lg text-lg">
+                    <input type="text" placeholder="Your Contact (optional)" class="w-full mt-3 p-3 border rounded-lg text-lg">
+                    <button class="mt-4 bg-purple-600 text-white px-4 py-3 rounded-lg hover:bg-purple-700 w-full text-lg">Submit</button>
+                </form>
+            </div>
+
+            <!-- Anonymous Feedback -->
+            <div class="bg-purple-100 p-8 rounded-lg shadow-md h-64 flex flex-col justify-center">
+                <h3 class="text-2xl font-bold text-purple-700">💬 Anonymous Feedback</h3>
+                <form>
+                    <textarea placeholder="Share your thoughts..." class="w-full mt-3 p-3 border rounded-lg text-lg"></textarea>
+                    <button class="mt-4 bg-purple-600 text-white px-4 py-3 rounded-lg hover:bg-purple-700 w-full text-lg">Submit</button>
+                </form>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-purple-900 text-white text-center p-4 mt-10">
+        <p>© 2025 CanteenX. All rights reserved.</p>
+    </footer>
+
+    <!-- JavaScript for Mobile Menu -->
+    <script>
+        const menuBtn = document.getElementById("menu-btn");
+        const menu = document.getElementById("menu");
+
+        menuBtn.addEventListener("click", () => {
+            menu.classList.toggle("hidden");
+        });
+    </script>
+
+</body>
+</html>
