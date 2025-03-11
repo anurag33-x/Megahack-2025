@@ -3,133 +3,260 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Canteen Menu</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-purple-100 text-gray-900">
+    <title>Admin Panel - Canteen Menu</title>
+    <style>
+        /* General Styling */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
 
-    <!-- Navbar -->
-    <nav class="bg-purple-200 shadow-md p-4 flex justify-between items-center relative">
-        <h1 class="text-2xl font-bold text-purple-700">The Delicious Hub</h1>
-        <button id="menu-btn" class="md:hidden text-purple-700 text-3xl focus:outline-none">☰</button>
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            text-align: center;
+            padding: 20px;
+        }
 
-        <ul id="menu" class="hidden md:flex space-x-6 absolute md:relative top-16 left-0 w-full md:w-auto bg-purple-200 md:bg-transparent md:flex-row flex-col md:top-0 p-4 md:p-0 shadow-md md:shadow-none">
-            <li><a href="./homepage.html" class="block text-gray-700 hover:text-purple-600 p-2">Home</a></li>
-            <li><a href="menu.html" class="block text-gray-700 hover:text-purple-600 p-2">Menu</a></li>
-            <li><a href="cart.html" class="block text-gray-700 hover:text-purple-600 p-2">Cart</a></li>
-            <li><a href="orders.html" class="block text-gray-700 hover:text-purple-600 p-2">Orders</a></li>
-            <li><a href="contact.html" class="block text-gray-700 hover:text-purple-600 p-2">Contact</a></li>
-        </ul>
+        h1 {
+            font-size: 2.5rem;
+            color: #007bff;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
 
-        <a href="profile.html" class="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 hidden md:block">Profile</a>
-    </nav>
+        /* Admin Panel */
+        .admin-panel {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            margin: auto;
+            margin-bottom: 20px;
+        }
 
-    <!-- Today's Special Section -->
-    <section class="max-w-4xl mx-auto py-10 text-center">
-        <h2 class="text-3xl font-bold text-purple-700">🌟 Today's Special</h2>
-        <div id="specials-list" class="flex justify-center flex-wrap gap-6 mt-6"></div>
-    </section>
+        .admin-panel h2 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: #333;
+        }
 
-    <!-- Most Ordered Food This Week -->
-    <section class="max-w-4xl mx-auto py-10 text-center">
-        <h2 class="text-3xl font-bold text-purple-700">🔥 Most Ordered This Week</h2>
-        <div id="most-sold-list" class="flex justify-center flex-wrap gap-6 mt-6"></div>
-    </section>
+        input, button {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 1rem;
+        }
 
-    <!-- Menu Section -->
-    <section class="max-w-4xl mx-auto py-10 text-center">
-        <h2 class="text-3xl font-bold text-purple-700">🍽️ Our Menu</h2>
-        <div id="menu-list" class="flex justify-center flex-wrap gap-6 mt-6"></div>
-    </section>
+        input:focus {
+            border-color: #007bff;
+            outline: none;
+        }
 
-    <!-- Footer -->
-    <footer class="bg-purple-900 text-white text-center p-4 mt-10">
-        <p>© 2025 CanteenX. All rights reserved.</p>
-    </footer>
+        /* File Input Customization */
+        .file-input-container {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            width: 100%;
+        }
 
-    <!-- Firebase Scripts -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
-    
-        const firebaseConfig = {
-            apiKey: "AIzaSyCht7ZJ5csZg6Y_YtGtNORN0x25JOGCNEE",
-            authDomain: "the-delicious-hub.firebaseapp.com",
-            projectId: "the-delicious-hub",
-            storageBucket: "the-delicious-hub.appspot.com",
-            messagingSenderId: "1073723518081",
-            appId: "1:1073723518081:web:12102f7739638d6491b180"
-        };
-    
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-    
-        // Function to load menu items and enable "Add to Cart" functionality
-        async function loadItems(collectionName, elementId) {
-            const listElement = document.getElementById(elementId);
-            listElement.innerHTML = ''; // Clear previous content
-    
-            try {
-                const snapshot = await getDocs(collection(db, collectionName));
-                let itemsHTML = ""; // Store items as HTML string to avoid duplicate event listeners
-    
-                snapshot.forEach(docSnap => {
-                    const item = docSnap.data();
-                    itemsHTML += `
-                        <div class="menu-item bg-purple-300 p-6 rounded-lg shadow-md h-48 w-48 flex flex-col justify-center items-center text-center">
-                            <h4 class="font-bold text-xl text-purple-900">${item.name}</h4>
-                            <p class="text-lg text-gray-800 font-semibold">₹${item.price}</p>
-                            ${collectionName === "most_sold" ? `<p class="text-yellow-800 text-sm mt-1">🔥 Ordered ${item.soldCount} times</p>` : ""}
-                            <button class="add-to-cart bg-purple-600 text-white px-6 py-3 rounded-lg hover:bg-purple-700 mt-2"
-                                    data-name="${item.name}" data-price="${item.price}" data-image="${item.image || ''}">
-                                Add
-                            </button>
-                        </div>
-                    `;
-                });
-    
-                listElement.innerHTML = itemsHTML; // Insert all items at once
-    
-            } catch (error) {
-                console.error(`Error loading ${collectionName} items:`, error);
+        .file-input {
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .file-label {
+            background-color: #007bff;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            display: block;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background 0.3s ease-in-out;
+        }
+
+        .file-label:hover {
+            background-color: #0056b3;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            font-weight: bold;
+            transition: background 0.3s ease-in-out;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .delete-btn {
+            background-color: #dc3545;
+        }
+
+        .delete-btn:hover {
+            background-color: #c82333;
+        }
+
+        /* Menu Container */
+        .menu-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .menu-item {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease-in-out;
+            text-align: center;
+        }
+
+        .menu-item:hover {
+            transform: scale(1.05);
+        }
+
+        .menu-item img {
+            width: 100%;
+            height: 180px;
+            border-radius: 8px;
+            object-fit: cover;
+            margin-bottom: 10px;
+        }
+
+        .menu-item h2 {
+            font-size: 1.5rem;
+            margin: 10px 0;
+        }
+
+        .menu-item p {
+            font-size: 1.2rem;
+            color: #007bff;
+            font-weight: bold;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .admin-panel {
+                width: 90%;
+            }
+
+            .menu-container {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             }
         }
-    
-        // Function to handle "Add to Cart" click events (Avoids multiple event bindings)
-        function setupAddToCartListeners() {
-            document.body.addEventListener("click", (event) => {
-                if (event.target.classList.contains("add-to-cart")) {
-                    const button = event.target;
-                    const name = button.getAttribute("data-name");
-                    const price = parseFloat(button.getAttribute("data-price"));
-                    const image = button.getAttribute("data-image") || "default-image.jpg"; // Default image
-    
-                    let cart = JSON.parse(localStorage.getItem("cart")) || [];
-                    cart.push({ name, price, image });
-                    localStorage.setItem("cart", JSON.stringify(cart));
-    
-                    alert(`${name} added to cart!`);
-                }
+    </style>
+</head>
+<body>
+
+    <h1>📜 Admin Panel - Canteen Menu 📜</h1>
+
+    <div class="admin-panel">
+        <h2>Add New Product</h2>
+        <input type="text" id="new-name" placeholder="Item Name">
+        <input type="number" id="new-half" placeholder="Half Plate Price">
+        <input type="number" id="new-full" placeholder="Full Plate Price">
+        
+        <div class="file-input-container">
+            <label class="file-label" for="new-image">📷 Choose an Image</label>
+            <input type="file" id="new-image" accept="image/*" class="file-input">
+        </div>
+        
+        <button onclick="addNewProduct()">➕ Add Product</button>
+    </div>
+
+    <div class="menu-container" id="menu-container"></div>
+
+    <script>
+        let menuItems = JSON.parse(localStorage.getItem("menuItems")) || [];
+
+        function saveToLocalStorage() {
+            localStorage.setItem("menuItems", JSON.stringify(menuItems));
+        }
+
+        function renderMenu() {
+            const container = document.getElementById("menu-container");
+            container.innerHTML = "";
+
+            if (menuItems.length === 0) {
+                container.innerHTML = "<p style='color: gray;'>No menu items added yet.</p>";
+                return;
+            }
+
+            menuItems.forEach((item, index) => {
+                container.innerHTML += `
+                    <div class="menu-item">
+                        <img src="${item.image}" alt="${item.name}">
+                        <h2>${item.name}</h2>
+                        <p>Half: ₹${item.half} | Full: ₹${item.full}</p>
+                        <button class="delete-btn" onclick="deleteProduct(${index})">❌ Delete</button>
+                    </div>
+                `;
             });
         }
-    
-        // Load items when page loads
-        window.onload = () => {
-            loadItems("menu", "menu-list");
-            loadItems("specials", "specials-list");
-            loadItems("most_sold", "most-sold-list");
-            setupAddToCartListeners(); // Attach event listeners once
-        };
-    
-        // Mobile menu toggle
-        document.getElementById("menu-btn").addEventListener("click", () => {
-            document.getElementById("menu").classList.toggle("hidden");
-        });
-    
+
+        function addNewProduct() {
+            const name = document.getElementById("new-name").value;
+            const halfPrice = document.getElementById("new-half").value;
+            const fullPrice = document.getElementById("new-full").value;
+            const imageFile = document.getElementById("new-image").files[0];
+
+            if (!name || !halfPrice || !fullPrice || !imageFile) {
+                alert("Please fill all fields and select an image.");
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                menuItems.push({
+                    id: menuItems.length + 1,
+                    name: name,
+                    half: parseInt(halfPrice),
+                    full: parseInt(fullPrice),
+                    image: e.target.result
+                });
+
+                saveToLocalStorage();
+                document.getElementById("new-name").value = "";
+                document.getElementById("new-half").value = "";
+                document.getElementById("new-full").value = "";
+                document.getElementById("new-image").value = "";
+                renderMenu();
+            };
+            reader.readAsDataURL(imageFile);
+        }
+
+        function deleteProduct(index) {
+            menuItems.splice(index, 1);
+            saveToLocalStorage();
+            renderMenu();
+        }
+
+        renderMenu();
     </script>
-    
-    
-    
 
 </body>
 </html>

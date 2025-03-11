@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales Overview</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <div class="content">
+        <h2>Total Sales Overview</h2>
+        
+        <h3>📅 Sales This Week</h3>
+        <canvas id="weeklySalesChart"></canvas>
+        
+        <h3>📊 Last Month's Sales: <span id="monthlySales">$0</span></h3>
+        
+        <h3>🏆 Best Seller: <span id="bestSeller">None</span></h3>
+        <h3>⚠️ Least Sold Product: <span id="leastSeller">None</span></h3>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const weeklySalesData = [0, 0, 0, 0, 0, 0, 0]; // All sales set to 0
+            const lastMonthSales = 0; // Total sales set to 0
+            const bestSeller = "None"; // No best seller
+            const leastSeller = "None"; // No least seller
+
+            // Set text values
+            document.getElementById("monthlySales").textContent = `$${lastMonthSales}`;
+            document.getElementById("bestSeller").textContent = bestSeller;
+            document.getElementById("leastSeller").textContent = leastSeller;
+
+            // Chart for weekly sales
+            const ctxWeekly = document.getElementById("weeklySalesChart").getContext("2d");
+            new Chart(ctxWeekly, {
+                type: "bar",
+                data: {
+                    labels: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+                    datasets: [{
+                        label: "Sales This Week",
+                        data: weeklySalesData,
+                        backgroundColor: "rgba(75, 192, 192, 0.5)",
+                        borderColor: "rgba(75, 192, 192, 1)",
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>

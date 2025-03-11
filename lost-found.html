@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lost and Found - Cafeteria Admin</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            width: 40%;
+            max-width: 400px;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        h2, h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .add-lost-item {
+            background: #e3f2fd;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 6px;
+            margin: 6px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        button {
+            background-color: #007BFF;
+            color: white;
+            padding: 6px 10px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .lost-items-list {
+            margin-top: 10px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .lost-item {
+            background: #fff3cd;
+            padding: 8px;
+            border-left: 4px solid #ff9800;
+            margin-bottom: 6px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 12px;
+        }
+
+        .lost-item img {
+            width: 50px;
+            height: 50px;
+            border-radius: 5px;
+            margin-right: 8px;
+        }
+
+        .lost-item-details {
+            flex-grow: 1;
+            font-size: 12px;
+            text-align: left;
+        }
+
+        .buttons button {
+            font-size: 10px;
+            padding: 4px 6px;
+        }
+
+        .date {
+            font-size: 10px;
+            color: #666;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Lost and Found</h2>
+
+        <div class="add-lost-item">
+            <h3>Add Lost Item</h3>
+            <input type="text" id="lostItemTitle" placeholder="Item Name">
+            <textarea id="lostItemDescription" placeholder="Description"></textarea>
+            <input type="file" id="lostItemImage" accept="image/*">
+            <input type="date" id="lostItemDate">
+            <button onclick="addLostItem()">➕ Add Item</button>
+        </div>
+
+        <div class="lost-items-list" id="lostItemsList">
+            <h3>Lost Items</h3>
+            <p>No lost items yet.</p>
+        </div>
+    </div>
+
+    <script>
+        function addLostItem() {
+            const title = document.getElementById("lostItemTitle").value;
+            const description = document.getElementById("lostItemDescription").value;
+            const date = document.getElementById("lostItemDate").value;
+            const fileInput = document.getElementById("lostItemImage");
+            const file = fileInput.files[0];
+
+            if (!title || !description || !date || !file) {
+                alert("Please fill all fields and upload an image.");
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const imageUrl = e.target.result;
+                const lostItemsList = document.getElementById("lostItemsList");
+
+                const itemDiv = document.createElement("div");
+                itemDiv.classList.add("lost-item");
+                itemDiv.innerHTML = `
+                    <img src="${imageUrl}" alt="${title}">
+                    <div class="lost-item-details">
+                        <strong>${title}</strong>
+                        <p>${description}</p>
+                        <p class="date">🗓️ Found on: ${date}</p>
+                    </div>
+                    <button onclick="removeItem(this)">✅ Mark as Returned</button>
+                `;
+
+                lostItemsList.appendChild(itemDiv);
+            };
+            reader.readAsDataURL(file);
+
+            document.getElementById("lostItemTitle").value = "";
+            document.getElementById("lostItemDescription").value = "";
+            document.getElementById("lostItemDate").value = "";
+            fileInput.value = "";
+        }
+
+        function removeItem(button) {
+            button.parentElement.remove();
+        }
+    </script>
+
+</body>
+</html>
